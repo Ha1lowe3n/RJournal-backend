@@ -33,6 +33,8 @@ export class PostEntity {
     @OneToMany(() => CommentEntity, (comment) => comment.post)
     comments: CommentEntity[];
 
-    @ManyToOne(() => UserEntity, (user) => user.posts)
+    @ManyToOne(() => UserEntity, (user) => user.posts, {
+        nullable: false,
+    })
     author: UserEntity;
 }

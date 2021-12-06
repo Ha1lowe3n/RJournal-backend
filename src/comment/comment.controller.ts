@@ -10,19 +10,20 @@ import {
 import { CommentService } from './comment.service';
 import { CreateCommentDto } from './dto/create-comment.dto';
 import { UpdateCommentDto } from './dto/update-comment.dto';
+import { CommentEntity } from './entities/comment.entity';
 
 @Controller('comments')
 export class CommentController {
     constructor(private readonly commentService: CommentService) {}
 
-    @Post()
-    async create(@Body() dto: CreateCommentDto) {
+    @Post('create')
+    async create(@Body() dto: CreateCommentDto): Promise<CommentEntity> {
         return await this.commentService.create(dto);
     }
 
     @Get()
-    findAll() {
-        return this.commentService.findAll();
+    async findAll(): Promise<CommentEntity[]> {
+        return await this.commentService.findAll();
     }
 
     @Get(':id')

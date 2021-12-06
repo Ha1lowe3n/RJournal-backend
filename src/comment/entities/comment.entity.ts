@@ -23,9 +23,13 @@ export class CommentEntity {
     @UpdateDateColumn()
     updatedAt: Date;
 
-    @ManyToOne(() => UserEntity, (user) => user.comments)
+    @ManyToOne(() => UserEntity, (user) => user.comments, {
+        nullable: false,
+    })
     author: UserEntity;
 
-    @ManyToOne(() => PostEntity, (post) => post.comments)
+    @ManyToOne(() => PostEntity, (post) => post.comments, {
+        nullable: false,
+    })
     post: PostEntity;
 }

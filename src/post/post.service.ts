@@ -1,5 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { UserEntity } from 'src/user/entities/user.entity';
 import { DeleteResult, Repository } from 'typeorm';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
@@ -10,11 +11,17 @@ export class PostService {
     constructor(
         @InjectRepository(PostEntity)
         private postRepository: Repository<PostEntity>,
+        @InjectRepository(UserEntity)
+        private userRepository: Repository<UserEntity>,
     ) {}
 
     async create(dto: CreatePostDto): Promise<PostEntity> {
         const newPost = new PostEntity();
         Object.assign(newPost, dto);
+
+        const user = await this.userRepository.findOne({ id: 1 });
+
+        newPost.author = user;
 
         return await this.postRepository.save(newPost);
     }

@@ -1,5 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { PostEntity } from 'src/post/entities/post.entity';
+import { UserEntity } from 'src/user/entities/user.entity';
 import { Repository } from 'typeorm';
 import { CreateCommentDto } from './dto/create-comment.dto';
 import { UpdateCommentDto } from './dto/update-comment.dto';
@@ -10,15 +12,26 @@ export class CommentService {
     constructor(
         @InjectRepository(CommentEntity)
         private commentRepository: Repository<CommentEntity>,
+        @InjectRepository(UserEntity)
+        private userRepository: Repository<UserEntity>,
+        @InjectRepository(PostEntity)
+        private postRepository: Repository<PostEntity>,
     ) {}
 
-    async create(dto: CreateCommentDto) {
+    async create(dto: CreateCommentDto): Promise<CommentEntity> {
         const newComment = new CommentEntity();
         Object.assign(newComment, dto);
+
+        const user = await this.userRepository.findOne({ id: 1 });
+        const post = await this.postRepository.findOne({ id: dto.postId });
+
+        newComment.author = user;
+        newComment.post = post;
+
         return await this.commentRepository.save(newComment);
     }
 
-    async findAll() {
+    async findAll(): Promise<CommentEntity[]> {
         return await this.commentRepository.find();
     }
 

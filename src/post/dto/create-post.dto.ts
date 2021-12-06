@@ -1,4 +1,4 @@
-import { ArrayMinSize, IsNotEmpty, MinLength } from 'class-validator';
+import { ArrayMinSize, IsInt, IsNotEmpty, MinLength } from 'class-validator';
 
 export class CreatePostDto {
     @IsNotEmpty({ message: 'Заголовок не может быть пустым' })
