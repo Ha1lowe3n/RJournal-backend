@@ -27,7 +27,7 @@ export class PostService {
         const findArticle = await this.postRepository.findOne(id);
 
         if (!findArticle) {
-            throw new HttpException('ID is incorrect', HttpStatus.NOT_FOUND);
+            throw new HttpException('Пост не найден', HttpStatus.NOT_FOUND);
         }
 
         return findArticle;
@@ -37,7 +37,7 @@ export class PostService {
         const findArticle = await this.postRepository.findOne(id);
 
         if (!findArticle) {
-            throw new HttpException('ID is incorrect', HttpStatus.NOT_FOUND);
+            throw new HttpException('Пост не найден', HttpStatus.NOT_FOUND);
         }
 
         Object.assign(findArticle, dto);
@@ -53,14 +53,4 @@ export class PostService {
 
         return await this.postRepository.delete(id);
     }
-
-    // async checkId(id: number): Promise<PostEntity> {
-    //     const findArticle = await this.postRepository.findOne(id);
-
-    //     if (!findArticle) {
-    //         throw new HttpException('ID is incorrect', HttpStatus.NOT_FOUND);
-    //     }
-
-    //     return findArticle;
-    // }
 }

@@ -1,4 +1,4 @@
-import { IsNotEmpty, MinLength } from 'class-validator';
+import { ArrayMinSize, IsNotEmpty, MinLength } from 'class-validator';
 
 export class CreatePostDto {
     @IsNotEmpty({ message: 'Заголовок не может быть пустым' })
@@ -7,6 +7,7 @@ export class CreatePostDto {
     @IsNotEmpty({ message: 'Текст поста не может быть пустым' })
     readonly body: string;
 
-    @MinLength(1, { message: 'Нужно выбрать тег' })
+    @ArrayMinSize(1, { message: 'Нужно выбрать тег' })
+    @MinLength(1, { each: true, message: 'Тег не может быть пустым' })
     readonly tags: string[];
 }
