@@ -7,6 +7,11 @@ import { PostModule } from './post/post.module';
 import { CommentModule } from './comment/comment.module';
 
 @Module({
-    imports: [TypeOrmModule.forRoot(ormconfig), UserModule, PostModule, CommentModule],
+    imports: [
+        TypeOrmModule.forRoot(ormconfig),
+        UserModule,
+        PostModule,
+        CommentModule,
+    ],
 })
 export class AppModule {}

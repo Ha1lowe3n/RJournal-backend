@@ -6,8 +6,10 @@ import {
     CreateDateColumn,
     UpdateDateColumn,
     ManyToOne,
+    Entity,
 } from 'typeorm';
 
+@Entity({ name: 'comments' })
 export class CommentEntity {
     @PrimaryGeneratedColumn()
     id: number;
