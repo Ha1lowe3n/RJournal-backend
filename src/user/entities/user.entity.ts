@@ -5,6 +5,8 @@ import {
     BeforeInsert,
     OneToMany,
     CreateDateColumn,
+    ManyToMany,
+    JoinTable,
 } from 'typeorm';
 import { hash } from 'bcrypt';
 import { CommentEntity } from 'src/comment/entities/comment.entity';
@@ -24,6 +26,9 @@ export class UserEntity {
     @Column({ select: false, nullable: true })
     password?: string;
 
+    @Column({ default: 0 })
+    carma: number;
+
     @CreateDateColumn()
     createdAt: Date;
 
@@ -32,6 +37,14 @@ export class UserEntity {
 
     @OneToMany(() => PostEntity, (post) => post.author)
     posts: PostEntity[];
+
+    @ManyToMany(() => PostEntity)
+    @JoinTable()
+    uppedPosts: PostEntity[];
+
+    @ManyToMany(() => CommentEntity)
+    @JoinTable()
+    uppedComments: CommentEntity[];
 
     @BeforeInsert()
     async hashPassword() {

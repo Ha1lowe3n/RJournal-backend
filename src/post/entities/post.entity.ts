@@ -24,6 +24,9 @@ export class PostEntity {
     @Column('simple-array')
     tags: string[];
 
+    @Column({ default: 0 })
+    carma: number;
+
     @CreateDateColumn()
     createdAt: Date;
 

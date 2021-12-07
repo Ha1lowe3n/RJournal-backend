@@ -60,4 +60,46 @@ export class PostService {
 
         return await this.postRepository.delete(id);
     }
+
+    async upCarma(postId: number, userId: number): Promise<PostEntity> {
+        const findPost = await this.postRepository.findOne(postId);
+        const findUser = await this.userRepository.findOne(userId, {
+            relations: ['uppedPosts'],
+        });
+
+        const uppedPostIndex = findUser.uppedPosts.findIndex(
+            (uppedPost) => uppedPost.id === findPost.id,
+        );
+
+        if (uppedPostIndex === -1) {
+            findUser.uppedPosts.push(findPost);
+            findUser.carma++;
+            findPost.carma++;
+            await this.userRepository.save(findUser);
+            await this.postRepository.save(findPost);
+        }
+
+        return findPost;
+    }
+
+    async downCarma(postId: number, userId: number): Promise<PostEntity> {
+        const findPost = await this.postRepository.findOne(postId);
+        const findUser = await this.userRepository.findOne(userId, {
+            relations: ['uppedPosts'],
+        });
+
+        const uppedPostIndex = findUser.uppedPosts.findIndex(
+            (uppedPost) => uppedPost.id === findPost.id,
+        );
+
+        if (uppedPostIndex >= 0) {
+            findUser.uppedPosts.splice(uppedPostIndex, 1);
+            findUser.carma--;
+            findPost.carma--;
+            await this.userRepository.save(findUser);
+            await this.postRepository.save(findPost);
+        }
+
+        return findPost;
+    }
 }

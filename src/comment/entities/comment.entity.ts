@@ -17,6 +17,9 @@ export class CommentEntity {
     @Column()
     text: string;
 
+    @Column({ default: 0 })
+    carma: number;
+
     @CreateDateColumn()
     createdAt: Date;
 

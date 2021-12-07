@@ -32,11 +32,24 @@ export class CommentController {
     }
 
     @Patch(':id')
-    update(
-        @Param('id') id: string,
-        @Body() updateCommentDto: UpdateCommentDto,
-    ) {
-        return this.commentService.update(+id, updateCommentDto);
+    update(@Param('id') id: string, @Body() dto: UpdateCommentDto) {
+        return this.commentService.update(+id, dto);
+    }
+
+    @Post(':id/up')
+    async upCarma(
+        @Param('id') commentId: string,
+        @Body('userId') userId: number,
+    ): Promise<CommentEntity> {
+        return await this.commentService.upCarma(+commentId, userId);
+    }
+
+    @Delete(':id/down')
+    async downCarma(
+        @Param('id') commentId: string,
+        @Body('userId') userId: number,
+    ): Promise<CommentEntity> {
+        return await this.commentService.downCarma(+commentId, userId);
     }
 
     @Delete(':id')

@@ -39,6 +39,48 @@ export class CommentService {
         return await this.commentRepository.find();
     }
 
+    async upCarma(commentId: number, userId: number): Promise<CommentEntity> {
+        const findComment = await this.commentRepository.findOne(commentId);
+        const findUser = await this.userRepository.findOne(userId, {
+            relations: ['uppedComments'],
+        });
+
+        const uppedCommentIndex = findUser.uppedComments.findIndex(
+            (uppedComment) => uppedComment.id === findComment.id,
+        );
+
+        if (uppedCommentIndex === -1) {
+            findUser.uppedComments.push(findComment);
+            findUser.carma++;
+            findComment.carma++;
+            await this.userRepository.save(findUser);
+            await this.commentRepository.save(findComment);
+        }
+
+        return findComment;
+    }
+
+    async downCarma(commentId: number, userId: number): Promise<CommentEntity> {
+        const findComment = await this.commentRepository.findOne(commentId);
+        const findUser = await this.userRepository.findOne(userId, {
+            relations: ['uppedComments'],
+        });
+
+        const uppedCommentIndex = findUser.uppedComments.findIndex(
+            (uppedComment) => uppedComment.id === findComment.id,
+        );
+
+        if (uppedCommentIndex >= 0) {
+            findUser.uppedComments.splice(uppedCommentIndex, 1);
+            findUser.carma--;
+            findComment.carma--;
+            await this.userRepository.save(findUser);
+            await this.commentRepository.save(findComment);
+        }
+
+        return findComment;
+    }
+
     findOne(id: number) {
         return `This action returns a #${id} comment`;
     }

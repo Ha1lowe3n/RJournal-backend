@@ -6,19 +6,17 @@ import {
     Patch,
     Param,
     Delete,
-    UsePipes,
-    ValidationPipe,
 } from '@nestjs/common';
 import { PostService } from './post.service';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
+import { PostEntity } from './entities/post.entity';
 
 @Controller('posts')
 export class PostController {
     constructor(private readonly postService: PostService) {}
 
     @Post('create')
-    @UsePipes(new ValidationPipe())
     async create(@Body() dto: CreatePostDto) {
         return await this.postService.create(dto);
     }
@@ -31,6 +29,22 @@ export class PostController {
     @Get(':id')
     findOne(@Param('id') id: string) {
         return this.postService.findOne(+id);
+    }
+
+    @Post(':id/up')
+    async upCarma(
+        @Param('id') postId: string,
+        @Body('userId') userId: number,
+    ): Promise<PostEntity> {
+        return await this.postService.upCarma(+postId, userId);
+    }
+
+    @Delete(':id/down')
+    async downCarma(
+        @Param('id') postId: string,
+        @Body('userId') userId: number,
+    ): Promise<PostEntity> {
+        return await this.postService.downCarma(+postId, userId);
     }
 
     @Patch(':id')
